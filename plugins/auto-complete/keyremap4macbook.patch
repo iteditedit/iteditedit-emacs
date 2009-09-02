@@ -1,0 +1,63 @@
+diff -r 886bd4446c72 files/prefpane/checkbox.xml
+--- a/files/prefpane/checkbox.xml	Wed Oct 08 19:42:28 2008 +0900
++++ b/files/prefpane/checkbox.xml	Thu Feb 05 00:40:48 2009 +0900
+@@ -2035,6 +2035,44 @@
+     </item>
+ 
+     <item>
++      <name>For 101 Keyboard Users</name>
++      <list>
++        <item>
++          <name>Use TM101 Keyboard Mode</name>
++          <sysctl>remap.tm101mode</sysctl>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_0, VK_SHIFT, KeyCode::KEY_0</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_1, VK_SHIFT, KeyCode::KEY_1</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_2, VK_SHIFT, KeyCode::KEY_2</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_3, VK_SHIFT, KeyCode::KEY_3</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_4, VK_SHIFT, KeyCode::KEY_4</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_5, VK_SHIFT, KeyCode::KEY_5</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_6, VK_SHIFT, KeyCode::KEY_6</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_7, VK_SHIFT, KeyCode::KEY_7</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_8, VK_SHIFT, KeyCode::KEY_8</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_9, VK_SHIFT, KeyCode::KEY_9</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::MINUS, VK_SHIFT, KeyCode::SLASH, ModifierFlag::SHIFT_L</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::EQUAL, VK_SHIFT, KeyCode::EQUAL, ModifierFlag::SHIFT_L</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::SEMICOLON, VK_SHIFT, KeyCode::QUOTE</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::SLASH, VK_SHIFT, KeyCode::MINUS, ModifierFlag::SHIFT_L</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::QUOTE, VK_SHIFT, KeyCode::QUOTE, ModifierFlag::SHIFT_L</autogen>
++          
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_0, KeyCode::KEY_0, ModifierFlag::SHIFT_L</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_1, KeyCode::KEY_1, ModifierFlag::SHIFT_L</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_2, KeyCode::KEY_2, ModifierFlag::SHIFT_L</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_3, KeyCode::KEY_3, ModifierFlag::SHIFT_L</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_4, KeyCode::KEY_4, ModifierFlag::SHIFT_L</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_5, KeyCode::KEY_5, ModifierFlag::SHIFT_L</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_6, KeyCode::KEY_6, ModifierFlag::SHIFT_L</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_7, KeyCode::KEY_7, ModifierFlag::SHIFT_L</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_8, KeyCode::KEY_8, ModifierFlag::SHIFT_L</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::KEY_9, KeyCode::KEY_9, ModifierFlag::SHIFT_L</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::MINUS, KeyCode::EQUAL</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::EQUAL, KeyCode::SEMICOLON, ModifierFlag::SHIFT_L</autogen>
++          <autogen>--FinalKeyToKey-- KeyCode::QUOTE, KeyCode::MINUS</autogen>
++        </item>
++      </list>
++    </item>
++
++    <item>
+       <name>For HHK (Happy Hacking Keyboard) Users</name>
+       <list>
+         <item>
+diff -r 886bd4446c72 src/core/kext/config/make-code.rb
+--- a/src/core/kext/config/make-code.rb	Wed Oct 08 19:42:28 2008 +0900
++++ b/src/core/kext/config/make-code.rb	Thu Feb 05 00:40:48 2009 +0900
+@@ -99,6 +99,10 @@
+           code_key += "RemapUtil::keyToKey(remapParams, #{params});\n"
+           func['key'] << name
+ 
++        when 'FinalKeyToKey'
++          code_key += "if (RemapUtil::keyToKey(remapParams, #{params})) return;\n"
++          func['key'] << name
++
+         when 'DoublePressModifier'
+           code_key += "{\n"
+           code_key += "static DoublePressModifier dpm;\n"

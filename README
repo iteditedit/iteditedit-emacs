@@ -1,0 +1,17 @@
+iteditedit brings your emacs-snapshot (v23) python ide
+The intention of this configuration is to provide the smoothest python programming possible with one of the most powerfull editors on the planet.
+
+Things to do before your up and running.
+
+Comes precompiled with Cedet 1.0pre6.
+
+Install rope, ropemacs, ropemode:
+hg clone http://bitbucket.org/agr/rope
+hg clone http://bitbucket.org/agr/ropemacs
+hg clone http://bitbucket.org/agr/ropemode
+
+Install pymacs:
+http://pymacs.progiciels-bpi.ca/archives/Pymacs.tar.gz
+
+Install yasnippet (v.53 tested and works):
+http://yasnippet.googlecode.com/files/yasnippet-0.5.3.tar.bz2
