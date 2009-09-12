@@ -56,7 +56,7 @@
 ;; Pythonic includes and system cmds are put with personal-python.
 ;; Currently includes C/C++ for completness
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;(load-library "personal-semantic")
+(load-library "personal-semantic")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs Code Browsers -- Awsome... C-b Toggles display

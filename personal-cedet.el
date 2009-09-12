@@ -1,6 +1,6 @@
-;; (setq semantic-load-turn-everything-on t)
+(setq semantic-load-turn-everything-on t)
 
-;; (require 'semantic-load)
+(require 'semantic-load)
 
 ;; Load CEDET
 (load-file "~/.emacs.d/plugins/cedet-1.0/common/cedet.elc")
@@ -9,7 +9,6 @@
 ;;(semantic-load-enable-minimum-features)
 
 ;; ;;make all the 'semantic.cache' files go somewhere sane
-;; (setq semanticdb-default-save-directory "~/.emacs.d/semantic.cache/")
 
 ;; ;; * This enables even more coding tools such as the nascent intellisense mode
 ;; ;;   decoration mode, and stickyfunc mode (plus regular code helpers)

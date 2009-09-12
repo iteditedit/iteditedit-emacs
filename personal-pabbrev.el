@@ -48,3 +48,5 @@
   (pabbrevx-ac-start))
 
 (fset 'pabbrev-suggestions-goto-buffer 'pabbrevx-suggestions-goto-buffer)
+
+(global-pabbrev-mode)

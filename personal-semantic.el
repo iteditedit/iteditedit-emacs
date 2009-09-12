@@ -1,4 +1,4 @@
-(semantic-load-enable-guady-code-helpers)
+
 (if (fboundp #'which-func-mode)
     (add-hook 'semantic-init-hooks (lambda ()
  				     (which-func-mode 1))))
@@ -6,10 +6,13 @@
 
 (setq semanticdb-default-system-save-directory
       (setq semanticdb-default-save-directory "~/.emacs.d/semantic.cache/"))
+;;(setq semanticdb-default-save-directory "~/.emacs.d/semantic.cache/")
 
 (require 'semantic-gcc)
 (require 'semantic-ia)
 (require 'eassist)
+
+(semantic-load-enable-guady-code-helpers)
 
 ;;(require 'semanticdb-global)
 ;;(semanticdb-enable-gnu-global-databases 'c-mode)
