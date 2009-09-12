@@ -33,3 +33,4 @@
 (set-default 'frame-title-format 
              (list "" "emacs" "@" (getenv "HOST") " : %f" ))
 
+(setq default-cursor-type 'bar)

@@ -50,6 +50,54 @@
 (show-paren-mode t)
 (setq show-paren-style 'mixed)
 
+; Moving cursor down at bottom scrolls only a single line, not half page
+;; for smooth scrolling and disabling the automatical recentering of emacs when moving the cursor
+(setq-default scroll-margin 1 scroll-conservatively 0)
+(setq-default scroll-up-aggressively 0.01 scroll-down-aggressively 0.01)
+
+;(savehist-mode) ; to save minibuffer history
+;;(setq visual-bell t)
+
+(defun toggle-fullscreen ()
+  (interactive)
+  (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+	    		 '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
+  (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+	    		 '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
+)
+
+
+(defadvice kill-new (before kill-new-push-xselection-on-kill-ring activate)
+  "Before putting new kill onto the kill-ring, add the clipboard/external selection to the kill ring"
+  (let ((have-paste (and interprogram-paste-function
+                         (funcall interprogram-paste-function))))
+    (when have-paste (push have-paste kill-ring))))
+
+;; clean out buffers except shell, agenda and org
+(defun restart ()
+  (interactive)
+  (let ((list (buffer-list)))
+    (while list
+      (let* ((buffer (car list))
+             (name (buffer-name buffer)))
+        (and (not (string-equal name "*shell*"))
+             (not (string-equal name "*scratch*"))
+             (kill-buffer buffer)))
+      (setq list (cdr list)))))
+
+;; clean out buffers except shell, agenda and org
+(defun clear-help-buffers ()
+  (interactive)
+  (let ((list (buffer-list)))
+    (while list
+      (let* ((buffer (car list))
+             (name (buffer-name buffer)))
+        (and (not (string-equal name "*shell*"))
+             (not (string-equal name "*scratch*"))
+             (kill-buffer buffer)))
+      (setq list (cdr list)))))
+
+
 ;;;
 ;;; Matching parentheses
 ;;;
@@ -115,5 +163,19 @@ Simon Hawkin <cema@cs.umd.edu> 03/14/1998"
 (defun buffer-quick-kill ()
   "Shortcut for killing a buffer"
   (interactive)
-  (kill-buffer (buffer-name))
-  (set-name))
+  (kill-buffer (buffer-name)))
+
+
+;; Insert Python debug statements
+(defun set-py-breakpoint (&optional no-other-breakpoints)
+  "Sets the necessary breakpoint py code."
+;;  (interactive)
+  (cond
+   (no-other-breakpoints
+    (insert "if not globals().get( 'PDB_ACTIVE', 0 ):
+       globals()['PDB_ACTIVE'] = 1
+       import pdb; pdb.set_trace()")
+    (indent-relative))
+   (t
+    (insert "import pdb; pdb.set_trace()"))
+   ))

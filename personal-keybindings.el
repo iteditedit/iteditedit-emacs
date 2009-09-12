@@ -19,16 +19,18 @@
 ;;(global-set-key [f12] 'menu-bar-mode)
 (global-set-key [(shift f12)] 'tool-bar-mode)
 (global-set-key [(control u)] 'undo)
+(global-set-key "\M-gc" 'goto-char)
 
 
 (global-set-key "\C-t" 'winring-new-configuration)
-(global-set-key "\C-f" 'find-file)
+(global-set-key "\C-f" 'ecb-goto-window-directories)
+(global-set-key [(control \:)] 'ecb-goto-window-edit-last)
 (global-set-key "\C-b" 'ecb-toggle-ecb-windows)
 (global-set-key [C-M-next] 'winring-prev-configuration)
 (global-set-key [C-M-prior] 'winring-next-configuration)
 (global-set-key "\C-w" 'other-window)
 (global-set-key [(control shift w)] 'other-frame)
-(global-set-key [(control \;)] 'eval-buffer)
+(global-set-key [(control \;)] 'eval-region)
 (global-set-key [(<C-escape>)] '(kill-buffer (current-buffer)))
 (global-set-key "\C-x\C-\\" 'delete-other-windows-vertically)
 (global-set-key "\M-\\" 'comment-or-uncomment-region)
@@ -48,11 +50,13 @@
 ;; TODO: Test for personal-behavior.el
 (global-set-key "\M-5" 'match-parenthesis)
 
-(global-set-key [(control \.)] 'shift-right)
-(global-set-key [(control ,)] 'shift-left)
+(global-set-key [(control \.)] (quote shift-right))
+(global-set-key [(control ,)] (quote shift-left))
 
 (global-set-key "\C-j" 'pull-next-line)
 (global-set-key-wise "\C-o" 'end-of-line 'newline-and-indent)
 (global-set-key "\C-m" 'newline-and-indent)
 
 (global-set-key [C-delete] 'buffer-quick-kill)
+
+(global-set-key [f12] 'switch-to-ansi-term)
