@@ -1,145 +1,317 @@
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Richard Steckroth Emacs Environment
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Library Paths
-;; Note: I like to keep every emacs library underneath
-;;   ~/.emacs.d and 3rd party apps under ~/.emacs.d/plugins
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-to-list 'load-path "~/.emacs.d")
-;Add all top-level subdirectories of .emacs.d to the load path
-(progn (cd "~/.emacs.d")
-       (normal-top-level-add-subdirs-to-load-path))
-;Add all ./plugins sub dirs
-(add-to-list 'load-path "~/.emacs.d/plugins")
-(progn (cd "~/.emacs.d/plugins")
-       (normal-top-level-add-subdirs-to-load-path))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; INITIAL PATHS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq config-dir (file-name-directory
+									(or (buffer-file-name) load-file-name)))
+(setq vendor-dir (concat config-dir "vendor"))
 
-(setenv "PYTHONPATH" "/home/lunatic/.emacs.d/plugins/Pymacs/:/home/lunatic/.emacs.d/plugins/gpycomplete/:/home/lunatic/.emacs.d/plugins/pycomplete/")
+(setq personal-dir (concat config-dir "personalization"))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load default packages that won't interfere
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'winring)
-(require 'pabbrev)
+(setq module-dir (concat config-dir "modules"))
 
-;; Minibuffer or Icicles support
-;;(load-file "~/.emacs.d/plugins/minibuffer-complete.el")
-(load-library "personal-icicles")
+;; Add top level vendor
+(add-to-list 'load-path vendor-dir)
+(add-to-list 'load-path module-dir)
 
+;; Add all vendor sub dirs
+;; http://www.emacswiki.org/emacs/LoadPath
+;;(progn (cd vendor-dir)
+;;       (normal-top-level-add-subdirs-to-load-path))
+;;(normal-top-level-add-to-load-path
+;;     '((concat vendor-dir "color-theme")
+;;       (concat vendor-dir "gist.el")
+;;       (concat vendor-dir "yaml-mode.el")
+;;       (concat vendor-dir "markdown-mode")
+;;       (concat vendor-dir "yasnippet")
+;;       (concat vendor-dir "anything")
+;;       (concat vendor-dir "maxframe")
+;;       (concat vendor-dir "haml-mode")
+;;       (concat vendor-dir "workspaces.el")
+;;       (concat vendor-dir "autotest")
+;;       (concat vendor-dir "twilight-emacs")
+;;       (concat vendor-dir "remember")
+;;       (concat vendor-dir "cheat.el")
+;;       (concat vendor-dir "ruby-mode")
+;;       (concat vendor-dir "auctex")
+;;       (concat vendor-dir "rdebug")
+;;       (concat vendor-dir "jump.el")
+;;       (concat vendor-dir "rinari")
+;;       (concat vendor-dir "auto-complete")
+;;       (concat vendor-dir "rcov")
+;;       (concat vendor-dir "auctex.el")
+;;       (concat vendor-dir "yasnippets-rails")
+;;       (concat vendor-dir "ruby-block")
+;;       (concat vendor-dir "ri-emacs")
+;;       (concat vendor-dir "tex-site.el")
+;;       (concat vendor-dir "preview-latex.el")
+;;       (concat vendor-dir "magit")))
+;;;
+;;
+(add-to-list 'load-path (concat vendor-dir "/."))
+(add-to-list 'load-path (concat vendor-dir "/color-theme"))
+(add-to-list 'load-path (concat vendor-dir "/gist.el"))
+(add-to-list 'load-path (concat vendor-dir "/yaml-mode.el"))
+(add-to-list 'load-path (concat vendor-dir "/markdown-mode"))
+(add-to-list 'load-path (concat vendor-dir "/yasnippet"))
+(add-to-list 'load-path (concat vendor-dir "/anything"))
+(add-to-list 'load-path (concat vendor-dir "/maxframe"))
+(add-to-list 'load-path (concat vendor-dir "/haml-mode"))
+(add-to-list 'load-path (concat vendor-dir "/workspaces.el"))
+(add-to-list 'load-path (concat vendor-dir "/autotest"))
+(add-to-list 'load-path (concat vendor-dir "/twilight-emacs"))
+(add-to-list 'load-path (concat vendor-dir "/remember"))
+(add-to-list 'load-path (concat vendor-dir "/cheat.el"))
+(add-to-list 'load-path (concat vendor-dir "/ruby-mode"))
+(add-to-list 'load-path (concat vendor-dir "/auctex"))
+(add-to-list 'load-path (concat vendor-dir "/rdebug"))
+(add-to-list 'load-path (concat vendor-dir "/jump.el"))
+(add-to-list 'load-path (concat vendor-dir "/rinari"))
+(add-to-list 'load-path (concat vendor-dir "/auto-complete"))
+(add-to-list 'load-path (concat vendor-dir "/rcov"))
+(add-to-list 'load-path (concat vendor-dir "/auctex.el"))
+(add-to-list 'load-path (concat vendor-dir "/yasnippets-rails"))
+(add-to-list 'load-path (concat vendor-dir "/ruby-block"))
+(add-to-list 'load-path (concat vendor-dir "/ri-emacs"))
+(add-to-list 'load-path (concat vendor-dir "/tex-site.el"))
+(add-to-list 'load-path (concat vendor-dir "/preview-latex.el"))
+(add-to-list 'load-path (concat vendor-dir "/magit"))
+;; EX's emacs config files
+;; mostly consists of other people configs
 
-(load-library "personal-pabbrev")
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Handle theme colors and personal interface options
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-library "personal-interface")
+;; Emacs should be compiled from CVS in order to make it work correctly with
+;; nXhtml and ruby mode. At least in debian based, emacs-snapshot is broken.
+;;
+;; cvs -d:pserver:anonymous@cvs.sv.gnu.org:/sources/emacs co emacs
+;; cd emacs
+;;
+;; Read the INSTALL file
+;;
+;; Verify you have Xfonts support if you want pretty fonts and other
+;; dependencies: txinfo, libgif-dev, libxpm-dev (Images), libgpmg1-dev
+;; (Mouse Support)
+;;
+;; wajig install libxfont-dev libxfont1 txinfo libgif-dev libxpm-dev libgpmg1-dev
+;;
+;; ./configure
+;;
+;; make
+;; sudo make install
+;;
+;; Set Monospace font
+;;
+;; echo "Emacs.font: Monospace-10" >> ~/.Xresources
+;; xrdb -merge ~/.Xresources
+;;
+;; /usr/local/bin/emacs
+;; /usr/local/bin/emacsclient
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load Ad-HOC or completely misc options.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-library "personal-behavior")
+;; Only start emacs-server if it is not already started
+(when (and
+       (> emacs-major-version 22)
+       (or (not (boundp 'server-process))
+	   (not (eq (process-status server-process) 'listen))))
+  (server-start))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load all my personal keybindings first to give non 3rd party
-;; packages precedence
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-library "personal-keybindings")
+(load-file (concat config-dir "/helpers/general-helper.el"))
+(load-file (concat vendor-dir "/desktop-menu.el"))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; CEDET Plugin
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-library "personal-cedet")
+;; Set coding system to UTF-8
+(prefer-coding-system 'utf-8)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; And for file system too
+(setq file-name-coding-system 'utf-8)
+
+;; ido-mode
+(setq ido-use-filename-at-point t)
+(ido-mode t)
+(ido-everywhere t)
+(add-hook 'ido-setup-hook 'custom-ido-extra-keys)
+
+;; icomplete
+;; preview command completion when writing in Minibuffer
+;; this is part of emacs
+(icomplete-mode 1)
+
+(require 'yaml-mode)
+
+;; use exuberant-ctags
+;;
+;; Generate file with:
+;;   ctags-exuberant -a -e -f TAGS --tag-relative -R app lib vendor
+(setq rinari-tags-file-name "TAGS")
+
+;; haml-mode and & sass-mode
+;; http://github.com/nex3/haml/
+(require 'haml-mode)
+(require 'sass-mode)
+(add-to-list 'auto-mode-alist '("\.haml$" . haml-mode))
+(add-to-list 'auto-mode-alist '("\.sass$" . sass-mode))
+
+;; require DVC
+;; (require 'dvc-autoloads)
+(require 'magit)
+
+(require 'cheat)
+
+;; anything
+;;(add-to-list 'load-path "~/.emacs.d/vendor/anything")
+(require 'anything)
+
+;; yasnippet
+(require 'yasnippet)
+(yas/initialize)
+(yas/load-directory (concat config-dir "/vendor/yasnippet/snippets"))
+(yas/load-directory (concat config-dir "/snippets"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Ruby Module 
+;; Provides: Ruby Mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'ruby-module)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; CEDET Mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'cedet-module)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; SemanticDB Parser and Senator
-;; Pythonic includes and system cmds are put with personal-python.
+;; Pythonic includes and system cmds are put with python module.
 ;; Currently includes C/C++ for completness
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-library "personal-semantic")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;(require 'semantic-module)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Emacs Code Browsers -- Awsome... C-b Toggles display
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-library "personal-ecb.el")
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Yasnippet integration. Must be loaded before auto-complete
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-library "personal-yasnippet")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Ecb Mode
+;; Requires: CEDET Module
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'ecb-module)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; International Spelling Plugin
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-library "personal-ispell")
+(when (require 'auto-complete nil t)
+  (require 'auto-complete-yasnippet)
+  (require 'auto-complete-css)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Autocompletion library - Rope, Pymacs, Yasnippet, Autocomplete
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-library "personal-auto-complete")
+  (global-auto-complete-mode t)           ;enable global-mode
+  (setq ac-auto-start t)                  ;automatically start
+  (setq ac-dwim 3)                        ;Do what i mean
+  (setq ac-override-local-map nil)        ;don't override local map
+  ;   (define-key ac-complete-mode-map "\t" 'ac-expand)
+  ;   (define-key ac-complete-mode-map "\r" 'ac-complete)
+  ;   (define-key ac-complete-mode-map "\M-n" 'ac-next)
+  ;   (define-key ac-complete-mode-map "\M-p" 'ac-previous)
+  (set-default 'ac-sources '(ac-source-yasnippet ac-source-abbrev ac-source-words-in-buffer))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Python Autocompletion, syntax checking, etc
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-library "personal-python")
+  (setq ac-modes
+	(append ac-modes
+		'(eshell-mode
+		    ;org-mode
+		  )))
+		    ;(add-to-list 'ac-trigger-commands 'org-self-insert-command)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; C/C++ Related autocompletion
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-library "personal-c")
+  (add-hook 'emacs-lisp-mode-hook
+    (lambda ()
+      (setq ac-sources '(ac-source-yasnippet ac-source-abbrev ac-source-words-in-buffer ac-source-symbols))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; FlyMake latest. Includes syntax checking and minibuffer echo area
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-library "personal-flymake")
+  (add-hook 'eshell-mode-hook
+    (lambda ()
+      (setq ac-sources '(ac-source-yasnippet ac-source-abbrev ac-source-files-in-current-dir ac-source-words-in-buffer)))))
+
+
+;; require AUCTeX
+(load "auctex.el" nil t t)
+(load "preview-latex.el" nil t t)
+
+; interpret and use ansi color codes in shell output windows
+(ansi-color-for-comint-mode-on)
+
+; make completion buffers disappear after 3 seconds.
+(add-hook 'completion-setup-hook
+  (lambda () (run-at-time 3 nil
+    (lambda () (delete-windows-on "*Completions*")))))
+
+;; run a few shells.
+(shell "*shell5*")
+
+(global-hl-line-mode 1) ; highlighting current line
+
+(desktop-save-mode t) ; save current session on exit
+
+;; close buffer without a confirmation
+(defun kill-current-buffer ()
+  (interactive)
+    (kill-buffer (current-buffer)))
+
+;; Display time
+(setq display-time-interval 1)
+(setq display-time-format "%H:%M:%S")
+(display-time-mode)
+
+(setq custom-file (concat config-dir "customization.el"))
+(load custom-file)
+;; Add easy navigation
+(global-set-key (kbd "M-<left>") 'windmove-left)          ; move to left windnow
+(global-set-key (kbd "M-<right>") 'windmove-right)        ; move to right window
+(global-set-key (kbd "M-<up>") 'windmove-up)              ; move to upper window
+(global-set-key (kbd "M-<down>") 'windmove-down)          ; move to downer window
+
+;; switch to console
+(global-set-key (kbd "C-5")
+  (lambda () (interactive) (switch-to-buffer "*shell5*")))
+
+;; kill current buffer
+(global-set-key (kbd "C-x k") 'kill-current-buffer)
+
+;; IDO keybindings
+(defun custom-ido-extra-keys ()
+  "Add my keybindings for ido."
+  (define-key ido-completion-map "\C-n" 'ido-next-match)
+  (define-key ido-completion-map "\C-p" 'ido-prev-match)
+  (define-key ido-completion-map " "    'ido-exit-minibuffer))
+
+;; Add key for comment-or-uncomment-region function
+(global-set-key (kbd "C-c c") 'comment-or-uncomment-region)
+
+;; use regexp while searching
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+
+;; duplicate line
+(global-set-key (kbd "C-=") 'duplicate-line)
+
+;; magit-status
+(global-set-key "\C-xg" 'magit-status)
+
+;; debugger
+(global-set-key [f9] 'gud-step)
+(global-set-key [f10] 'gud-next)
+(global-set-key [f11] 'gud-cont)
+(global-set-key "\C-c\C-d" 'rdebug)
+(require 'color-theme)
+(color-theme-initialize)
+;; http://edward.oconnor.cx/config/elisp/color-theme-hober2.el (wget) 
+(load-file (concat vendor-dir "/twilight-emacs/color-theme-twilight.el"))
+(color-theme-twilight)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Terminal Switching - Keybindings are F12
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-library "personal-terminal")
+(require 'terminal-module)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Superier Lisp Interpretor Evaluator and Debugger
+;; Personalized Control modules 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-library "personal-slime")
+(load-file (concat personal-dir "/keybindings.el"))
+(load-file (concat personal-dir "/interface.el"))
+(load-file (concat personal-dir "/behavior.el"))
 
-;; Ispell -- Currently uses /usr/bin/aspell
-(setq-default ispell-program-name "aspell")
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Fullscreen on startup
+;; Requires: personalization/behavior.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (toggle-fullscreen)
-
-(custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(ecb-fix-window-size (quote width))
- '(ecb-options-version "2.40")
- '(ecb-source-path (quote (("/home/lunatic/.emacs.d" "config") ("/home/lunatic" "home") ("/home/lunatic/Projects" "projects"))))
- '(ecb-windows-width 0.15)
- '(icicle-change-region-background-flag t)
- '(icicle-default-value t)
- '(icicle-hide-common-match-in-Completions-flag t)
- '(icicle-populate-interactive-history-flag t)
- '(icicle-region-background "#566566")
- '(icicle-search-highlight-context-levels-flag nil)
- '(use-dialog-box nil))
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(ecb-analyse-face ((((class color) (background dark)) (:inherit ecb-default-highlight-face :background "lightblue" :foreground "black" :weight bold))))
- '(ecb-default-highlight-face ((((class color) (background dark)) (:background "lightblue" :foreground "black" :weight bold))))
- '(ecb-directory-face ((((class color) (background dark)) (:inherit ecb-default-highlight-face :background "lightblue" :foreground "black" :weight bold))))
- '(ecb-history-face ((((class color) (background dark)) (:inherit ecb-default-highlight-face :background "lightblue" :foreground "black" :weight bold))))
- '(ecb-tag-header-face ((((class color) (background dark)) (:background "SeaGreen1" :foreground "black"))))
- '(icicle-search-context-level-1 ((((background dark)) (:background "#FA6CC847FFFF" :foreground "black"))))
- '(icicle-search-context-level-2 ((((background dark)) (:background "#C847FFFFE423" :foreground "black"))))
- '(icicle-search-context-level-3 ((((background dark)) (:background "#C847D8FEFFFF" :foreground "black"))))
- '(icicle-search-context-level-4 ((((background dark)) (:background "#EF46FFFFC847" :foreground "black"))))
- '(icicle-search-context-level-5 ((((background dark)) (:background "#FCFCE1E1FFFF" :foreground "black"))))
- '(icicle-search-context-level-6 ((((background dark)) (:background "#E1E1FFFFF0F0" :foreground "black"))))
- '(icicle-search-context-level-7 ((((background dark)) (:background "#E1E1EAEAFFFF" :foreground "black"))))
- '(icicle-search-context-level-8 ((((background dark)) (:background "#F6F5FFFFE1E1" :foreground "black")))))

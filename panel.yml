@@ -1,0 +1,30 @@
+--- 
+vendor: 
+  gist.el: 1
+  color-theme: 1
+  yasnippet: 1
+  markdown-mode: 1
+  yaml-mode.el: 1
+  haml-mode: 1
+  maxframe: 1
+  anything: 1
+  twilight-emacs: 1
+  autotest: 1
+  workspaces.el: 1
+  auctex: 1
+  ruby-mode: 1
+  cheat.el: 1
+  auto-complete: 1
+  rinari: 1
+  rdebug: 1
+  rcov: 1
+  yasnippets-rails: 1
+  auctex.el: 1
+  ri-emacs: 1
+  ruby-block: 1
+  magit: 1
+  preview-latex.el: 1
+  rcodetools: 1
+  tex-site.el: 1
+  org: 1
+  remember: 1
